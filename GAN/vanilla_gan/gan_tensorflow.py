@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import os
+plt.switch_backend('agg')
 
 
 def xavier_init(size):
@@ -90,7 +91,7 @@ G_solver = tf.train.AdamOptimizer().minimize(G_loss, var_list=theta_G)
 mb_size = 128
 Z_dim = 100
 
-mnist = input_data.read_data_sets('../../MNIST_data', one_hot=True)
+mnist = input_data.read_data_sets('./MNIST_data', one_hot=True)
 
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
@@ -100,10 +101,12 @@ if not os.path.exists('out/'):
 
 i = 0
 
-for it in range(1000000):
+for it in range(100000):
     if it % 1000 == 0:
         samples = sess.run(G_sample, feed_dict={Z: sample_Z(16, Z_dim)})
-
+        # print(samples)
+        # print(type(samples))
+        # print(samples.shape)
         fig = plot(samples)
         plt.savefig('out/{}.png'.format(str(i).zfill(3)), bbox_inches='tight')
         i += 1
